@@ -1,0 +1,42 @@
+        #!/bin/sh
+        # chkconfig: - 98 02
+        # description:  Service getting of mac address
+        # processname: Arping_service
+        # Source function library.
+        #if [ -f /etc/init.d/functions ] ; then
+        #  . /etc/init.d/functions
+        #elif [ -f /etc/rc.d/init.d/functions ] ; then
+        #  . /etc/rc.d/init.d/functions
+        #else
+        #  exit 0
+        #fi
+        #$KIND="Arping service"
+        start() {
+                nohup php -q /root/socket/arping_server.php > /root/socket/arping_server.log 2>&1 &
+	}
+	
+        stop() {
+                killall "php -q /root/socket/arping_server.php"
+        }
+        
+        restart() {
+                killall "php -q /root/socket/arping_server.php"
+                nohup php -q /root/socket/arping_server.php > /root/socket/arping_server.log 2>&1 &
+        }
+
+        case "$1" in
+          start)
+                  start
+                ;;
+          stop)
+                  stop
+                ;;
+          restart)
+                  restart
+                ;;
+          *)
+                echo $"Usage: $0 {start|stop|restart}"
+                exit 1
+        esac
+        exit 0
+        
